@@ -70,6 +70,8 @@ class WBMobileRequestRegistration(models.Model):
                 offset_limit += 50
         for prd in self.env['helpdesk.ticket'].search([('stage_id.display_in_mobile_app', '=', True)],
                                                       offset=offset_limit, limit=50, order="id"):
+            customer_detail = prd.partner_id
+            area_manager_detail = prd.x_studio_many2one_field_F3tVh
             helpdesk_list.append({'name': prd.name,
                  'id': prd.id,
                  'helpdesk_number':prd.x_studio_helpdesk_id or '',
@@ -82,20 +84,42 @@ class WBMobileRequestRegistration(models.Model):
                  'ticket_type_name': prd.ticket_type_id.name,
                  'created_by': prd.create_uid.name,
                  'created_date': "{}".format(prd.create_date),
-                 'customer_id': prd.partner_id.id,
-                 'customer_name': prd.partner_id.name,
-                 'area_manager_id': prd.x_studio_many2one_field_F3tVh.id,
-                 'area_manager_name': prd.x_studio_many2one_field_F3tVh.name,
+                 'customer_id': customer_detail.id,
+                 'customer_name': customer_detail.name,
+                  'customer_customer_id': customer_detail.x_studio_customer_id or '',
+                  'customer_first_name': customer_detail.x_studio_first_name or '',
+                  'customer_last_name': customer_detail.x_studio_last_name or '',
+                  'customer_country_id': customer_detail.country_id.id or False,
+                  'customer_country_name': customer_detail.country_id.name or '',
+                  'customer_state_id': customer_detail.state_id.id or False,
+                  'customer_state_name': customer_detail.state_id.name or '',
+                  'customer_mobile': customer_detail.mobile or '',
+                  'customer_phone': customer_detail.phone or '',
+                  'customer_street': customer_detail.street or '',
+                  'customer_street2': customer_detail.street2 or '',
+                  'customer_zip': customer_detail.zip or '',
+                  'customer_city': customer_detail.city or '',
+                  'customer_email': customer_detail.email or '',
+                 'area_manager_id': area_manager_detail.id,
+                 'area_manager_name': area_manager_detail.name,
+                  'area_manager_country_name': area_manager_detail.partner_id.country_id.name or '',
+                  'area_manager_state_name': area_manager_detail.partner_id.state_id.name or '',
+                  'area_manager_mobile': area_manager_detail.partner_id.mobile or '',
+                  'area_manager_phone': area_manager_detail.partner_id.phone or '',
+                  'area_manager_street': area_manager_detail.partner_id.street or '',
+                  'area_manager_street2': area_manager_detail.partner_id.street2 or '',
+                  'area_manager_zip': area_manager_detail.partner_id.zip or '',
+                  'area_manager_city': area_manager_detail.partner_id.city or '',
+                  'area_manager_email': area_manager_detail.partner_id.email or '',
                  'fse_id': prd.x_studio_fse.id,
                  'fse_name': prd.x_studio_fse.name,
                  'company_id': prd.company_id.id,
                  'company_name': prd.company_id.name,
-                 # 'stage_list':[{'stage_name': sts.name,
-                 #                 'stage_id': sts.id,
-                 #                 'is_last_status': sts.is_close} for sts in self.env['helpdesk.stage'].search([('team_ids', 'in', [prd.team_id.id])], order='sequence')],
                  'stage_id': prd.stage_id.id,
                  'stage_name': prd.stage_id.name,
                  })
+
+
         return json.dumps(helpdesk_list)
 
     def getProductList(self):
@@ -110,7 +134,16 @@ class WBMobileRequestRegistration(models.Model):
                 offset_limit += 50
         for prd in self.env['res.users'].sudo().search([('share', '=', False)],
                                                        offset=offset_limit, limit=50, order="id"):
-            helpdesk_list.append({'id': prd.id, 'name': prd.name})
+            user_detail = prd.partner_id
+            helpdesk_list.append({'id': prd.id, 'name': prd.name, 'country_name': user_detail.country_id.name or '',
+                                    'state_name': user_detail.state_id.name or '',
+                                    'mobile': user_detail.mobile or '',
+                                    'phone': user_detail.phone or '',
+                                    'street': user_detail.street or '',
+                                    'street2': user_detail.street2 or '',
+                                    'zip': user_detail.zip or '',
+                                    'city': user_detail.city or '',
+                                    'email': user_detail.email or '',})
         return json.dumps(helpdesk_list)
 
     def assignTeamMember(self, vals={}):
