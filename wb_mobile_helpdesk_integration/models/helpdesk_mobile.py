@@ -47,10 +47,10 @@ class WBMobileRequestRegistration(models.Model):
                             'city': prd.city or '',
                             'email': prd.email or ''
                             })
-        return json.dumps(customer_list)
+        return customer_list
 
     def getCompanyList(self):
-        return json.dumps([{'name':prd.name, 'id':prd.id} for prd in self.env['res.company'].sudo().search([])])
+        return [{'name':prd.name, 'id':prd.id} for prd in self.env['res.company'].sudo().search([])]
 
     def getHelpdeskTeamList(self, page=0):
         obj_list = []
@@ -60,7 +60,7 @@ class WBMobileRequestRegistration(models.Model):
                 offset_limit += 50
         for prd in self.env['helpdesk.team'].sudo().search([],offset=offset_limit, limit=50, order="id"):
             obj_list.append({'name': prd.name, 'id': prd.id, 'company_id': prd.company_id.id})
-        return json.dumps(obj_list)
+        return obj_list
 
     def getHelpdeskList(self, page=0):
         helpdesk_list = []
@@ -120,7 +120,7 @@ class WBMobileRequestRegistration(models.Model):
                  })
 
 
-        return json.dumps(helpdesk_list)
+        return helpdesk_list
 
     def getProductList(self):
         return json.dumps([{'id':prd.id, 'name':prd.name} for prd in
@@ -144,7 +144,7 @@ class WBMobileRequestRegistration(models.Model):
                                     'zip': user_detail.zip or '',
                                     'city': user_detail.city or '',
                                     'email': user_detail.email or '',})
-        return json.dumps(helpdesk_list)
+        return helpdesk_list
 
     def assignTeamMember(self, vals={}):
         # vals = {'fse_id':1, 'ticket_id':1}
@@ -174,4 +174,4 @@ class WBMobileRequestRegistration(models.Model):
         ticket_id.write({"x_studio_fse":vals.get("fse_id")})
         response_data['msg'] = "FSE user successfully updated in this ticket."
         response_data['status'] = 1
-        return json.dumps(response_data)
+        return response_data
