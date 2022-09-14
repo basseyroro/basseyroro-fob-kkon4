@@ -13,9 +13,7 @@ class SupportMobileAPI(http.Controller):
 
     @http.route('/get/company/list', type='json', auth='api_key')
     def getCompanyList(self, **kwargs):
-        request_data = json.loads(request.httprequest.data)
-        page = request_data.get("page", 1)
-        return request.env['wb.mobile.request.registration'].getCompanyList(page)
+        return request.env['wb.mobile.request.registration'].getCompanyList()
 
     @http.route('/get/helpdesk/team/list', type='json', auth='api_key')
     def getHelpdeskTeamList(self, **kwargs):
