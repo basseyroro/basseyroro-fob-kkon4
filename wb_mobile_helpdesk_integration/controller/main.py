@@ -5,13 +5,13 @@ from odoo.http import request
 
 class SupportMobileAPI(http.Controller):
 
-    @http.route('/get/customer/list', type='json', auth='api_key')
+    @http.route('/get/customer/list', type='http', auth='api_key')
     def getCustomerList(self, **kwargs):
         try:
             page = int(kwargs.get("page", '1'))
         except Exception as e:
             page = 1
-        return request.env['wb.mobile.request.registration'].getCustomerList(page)
+        return json.dumps(request.env['wb.mobile.request.registration'].getCustomerList(page))
 
     @http.route('/get/company/list', type='http', auth='api_key')
     def getCompanyList(self, **kwargs):
