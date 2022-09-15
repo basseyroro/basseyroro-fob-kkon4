@@ -11,7 +11,7 @@ class SupportMobileAPI(http.Controller):
             page = int(kwargs.get("page", '1'))
         except Exception as e:
             page = 1
-        return json.dumps(request.env['wb.mobile.request.registration'].getCustomerList(page))
+        return request.env['wb.mobile.request.registration'].getCustomerList(page)
 
     @http.route('/get/company/list', type='http', auth='api_key')
     def getCompanyList(self, **kwargs):
