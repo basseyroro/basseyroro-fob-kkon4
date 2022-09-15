@@ -5,32 +5,40 @@ from odoo.http import request
 
 class SupportMobileAPI(http.Controller):
 
-    @http.route('/get/customer/list', type='json', auth='api_key')
+    @http.route('/get/customer/list', type='http', auth='api_key')
     def getCustomerList(self, **kwargs):
-        request_data = json.loads(request.httprequest.data)
-        page = request_data.get("page", 1)
-        return request.env['wb.mobile.request.registration'].getCustomerList(page)
+        try:
+            page = int(kwargs.get("page", '1'))
+        except Exception as e:
+            page = 1
+        return json.dumps(request.env['wb.mobile.request.registration'].getCustomerList(page))
 
-    @http.route('/get/company/list', type='json', auth='api_key')
+    @http.route('/get/company/list', type='http', auth='api_key')
     def getCompanyList(self, **kwargs):
         return request.env['wb.mobile.request.registration'].getCompanyList()
 
-    @http.route('/get/helpdesk/team/list', type='json', auth='api_key')
+    @http.route('/get/helpdesk/team/list', type='http', auth='api_key')
     def getHelpdeskTeamList(self, **kwargs):
-        request_data = json.loads(request.httprequest.data)
-        page = request_data.get("page", 1)
+        try:
+            page = int(kwargs.get("page", '1'))
+        except Exception as e:
+            page = 1
         return request.env['wb.mobile.request.registration'].getHelpdeskTeamList(page)
 
-    @http.route('/get/helpdesk/list', type='json', auth='api_key')
+    @http.route('/get/helpdesk/list', type='http', auth='api_key')
     def getHelpdeskList(self, **kwargs):
-        request_data = json.loads(request.httprequest.data)
-        page = request_data.get("page", 1)
+        try:
+            page = int(kwargs.get("page", '1'))
+        except Exception as e:
+            page = 1
         return request.env['wb.mobile.request.registration'].getHelpdeskList(page)
 
-    @http.route('/get/team/list', type='json', auth='api_key')
+    @http.route('/get/team/list', type='http', auth='api_key')
     def getTeamList(self, **kwargs):
-        request_data = json.loads(request.httprequest.data)
-        page = request_data.get("page", 1)
+        try:
+            page = int(kwargs.get("page", '1'))
+        except Exception as e:
+            page = 1
         return request.env['wb.mobile.request.registration'].getTeamList(page)
 
     @http.route('/assign/team/member', type='json', auth='api_key', methods=["POST"])
